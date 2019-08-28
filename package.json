@@ -6,6 +6,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/server.js",
+    "build":"",
+    "test":"",
     "fixEslint": "eslint --fix src --ext .js" 
   },
   "dependencies": {
