@@ -1,12 +1,22 @@
 import jwt from 'jsonwebtoken';
+import * as yup from 'yup';
 
 import User from '../models/user';
 import authConfig from '../../config/auth';
 
 class SessionController {
   async store(req, res) {
-    const { email, password } = req.body;
+    const schema = yup.object().shape({
+      name: yup.string(),
+      email: yup.string().email(),
+      password: yup.string(),
+    });
 
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+
+    const { email, password } = req.body;
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
