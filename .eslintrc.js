@@ -18,7 +18,7 @@ module.exports = {
     'class-methods-use-this': 'off',
     'no-param-reassing': 'off',
     camelcase: 'off',
-    'no-unused-vars': ['error', { argsIgnorePattern: 'nest' }],
+    'no-unused-vars': ['error', { argsIgnorePattern: 'next' }],
     'no-param-reassign': ['error', { props: false }],
   },
 };
