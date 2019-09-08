@@ -1,15 +1,14 @@
-import * as yup from 'yup';
+import * as Yup from 'yup';
 
-import User from '../models/user';
+import User from '../models/User';
 
 class UserController {
   async store(req, res) {
-    const schema = yup.object.shape({
-      email: yup
-        .string()
+    const schema = Yup.object().shape({
+      email: Yup.string()
         .email()
         .required(),
-      password: yup.string().required(),
+      password: Yup.string().required(),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -22,21 +21,18 @@ class UserController {
   }
 
   async update(req, res) {
-    const schema = yup.object().shape({
-      name: yup.string(),
-      email: yup.string().email(),
-      oldPassword: yup.string().min(6),
-      password: yup
-        .string()
+    const schema = Yup.object().shape({
+      name: Yup.string(),
+      email: Yup.string().email(),
+      oldPassword: Yup.string().min(6),
+      password: Yup.string()
         .min(6)
         .when('oldPassword', (oldPassword, field) =>
           oldPassword ? field.required() : field
         ),
-      confirmPassword: yup
-        .string()
-        .when('password', (password, field) =>
-          password ? field.required : field
-        ),
+      confirmPassword: Yup.string().when('password', (password, field) =>
+        password ? field.required : field
+      ),
     });
 
     if (!(await schema.isValid(req.body))) {
