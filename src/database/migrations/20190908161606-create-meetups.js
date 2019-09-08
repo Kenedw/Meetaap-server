@@ -1,28 +1,39 @@
-
-
 module.exports = {
   up: (queryInterface, Sequelize) => {
     /*
       Add altering commands here.
       Return a promise to correctly handle asynchronicity.
-      
+
       Example:
-     */
-    return queryInterface.createTable('files', {
+      */
+    return queryInterface.createTable('meetups', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
-      name: {
+      title: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      path: {
+      description: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
+      },
+      localization: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      date: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      image_id: {
+        type: Sequelize.INTEGER,
+      },
+      user_id: {
+        type: Sequelize.INTEGER,
       },
       created_at: {
         type: Sequelize.DATE,
@@ -41,7 +52,7 @@ module.exports = {
       Return a promise to correctly handle asynchronicity.
 
       Example:
-    */
-    return queryInterface.dropTable('files');
+      */
+    return queryInterface.dropTable('meetups');
   },
 };
