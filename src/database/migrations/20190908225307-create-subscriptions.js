@@ -8,7 +8,7 @@ module.exports = {
 
       Example:
       */
-    return queryInterface.createTable('inscriptions', {
+    return queryInterface.createTable('subscriptions', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -33,6 +33,6 @@ module.exports = {
 
       Example:
       */
-    return queryInterface.dropTable('inscriptions');
+    return queryInterface.dropTable('subscriptions');
   },
 };
