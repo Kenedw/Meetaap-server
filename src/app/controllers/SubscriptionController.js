@@ -1,5 +1,5 @@
-import * as Yup from 'yup';
 import { isPast } from 'date-fns';
+import { Op } from 'sequelize';
 
 import Meetup from '../models/Meetup';
 import Subscription from '../models/Subscription';
@@ -12,24 +12,39 @@ import SubscriptionMail from '../jobs/SubscriptionMail';
 
 class SubscriptionController {
   async index(req, res) {
-    return res.json({ kronus: 'ok' });
+    const meetups = await Subscription.findAll({
+      attributes: ['id'],
+      include: [
+        {
+          model: Meetup,
+          as: 'meetup',
+          attributes: { exclude: ['finished'] },
+          where: { date: { [Op.gt]: new Date() } },
+        },
+        {
+          model: User,
+          as: 'user',
+          attributes: [],
+          where: { id: req.userId },
+        },
+      ],
+      order: [['meetup', 'date', 'ASC']],
+    });
+
+    if (!meetups) {
+      return res.status(404).json('Meetup not found');
+    }
+
+    return res.json(meetups);
   }
 
   async store(req, res) {
-    const schema = Yup.object().shape({
-      meetup_id: Yup.number().required(),
-    });
-
-    if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Validation fails' });
-    }
-
     /**
      * check if meetup exist
      */
-    const { meetup_id } = req.body;
+    const { id: meetupId } = req.params;
 
-    const meetup = await Meetup.findByPk(meetup_id, {
+    const meetup = await Meetup.findByPk(meetupId, {
       include: [
         {
           model: User,
@@ -38,7 +53,7 @@ class SubscriptionController {
         },
       ],
     });
-    console.log(meetup);
+
     if (!meetup) {
       return res.status(404).json({ error: 'Meetup not found' });
     }
@@ -54,7 +69,7 @@ class SubscriptionController {
      * check if already subscribed
      */
     const isIscription = await Subscription.findOne({
-      where: { user_id: req.userId, meetup_id },
+      where: { user_id: req.userId, meetupId },
     });
     if (isIscription) {
       return res.status(401).json({ error: 'Meetup already subscribed' });
@@ -78,7 +93,7 @@ class SubscriptionController {
     }
 
     const subscription = await Subscription.create({
-      meetup_id,
+      meetupId,
       user_id: req.userId,
     });
 
