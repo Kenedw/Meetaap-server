@@ -2,3 +2,5 @@ node_modules
 *.lock
 temp
 *.log
+.env
+.env.production

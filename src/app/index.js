@@ -1,3 +1,5 @@
+import 'dotenv-flow/config';
+
 import express from 'express';
 import routes from '../routes';
 
