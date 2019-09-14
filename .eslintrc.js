@@ -18,8 +18,7 @@ module.exports = {
     'class-methods-use-this': 'off',
     'no-param-reassing': 'off',
     camelcase: 'off',
-    'no-unused-vars': ['error', { argsIgnorePattern: 'next' }],
-    'no-unused-vars': ['error', { argsIgnorePattern: 'Sequelize' }],
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     'no-param-reassign': ['error', { props: false }],
   },
 };
